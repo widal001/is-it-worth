@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NumberInput } from "./numberInput";
 
 enum Period {
   WEEK = "week",
@@ -7,9 +8,9 @@ enum Period {
 }
 
 export const CostPerUseCalculator: React.FC = () => {
-  const [cost, setCost] = useState<number | string>("");
-  const [years, setYears] = useState<number | string>("");
-  const [frequency, setFrequency] = useState<number | string>("");
+  const [cost, setCost] = useState<number | string>(0);
+  const [years, setYears] = useState<number | string>(1);
+  const [frequency, setFrequency] = useState<number | string>(1);
   const [period, setPeriod] = useState<Period>(Period.YEAR); // Default is 'year'
 
   const calculateCostPerUse = (): string => {
@@ -39,69 +40,64 @@ export const CostPerUseCalculator: React.FC = () => {
   };
 
   return (
-    <div className="max-w-xl w-full mx- p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-        Cost Per Use Calculator
+    <div className="max-w-xl w-full mx-4 p-6">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6 lg:text-3xl">
+        Is it worth it?
       </h2>
 
       {/* Form container */}
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Cost ($)
-            <input
-              type="number"
-              value={cost}
-              onChange={(event) => setCost(event.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
+      <div className="text-lg lg:text-xl">
+        <p className="mb-4">
+          I'm looking to buy something that costs
+          <NumberInput
+            id="costInput"
+            defaultVal={cost as number}
+            label="Cost"
+            eventHandler={setCost}
+          />
+        </p>
+        <p className="mb-4">
+          It should last
+          <NumberInput
+            id="years"
+            defaultVal={years as number}
+            label="Years of Ownership"
+            eventHandler={setYears}
+          />
+        </p>
+        <p className="mb-4">
+          And I plan to use it
+          <NumberInput
+            id="frequencyInput"
+            defaultVal={frequency as number}
+            label="Frequency of use"
+            eventHandler={setFrequency}
+          />{" "}
+          per
+          <label className="sr-only" htmlFor="periodInput">
+            Period
           </label>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Years of Ownership
-            <input
-              type="number"
-              value={years}
-              onChange={(event) => setYears(event.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </label>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Frequency of Use
-            <input
-              type="number"
-              value={frequency}
-              onChange={(event) => setFrequency(event.target.value)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </label>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Per
-            <select
-              value={period}
-              onChange={(event) => setPeriod(event.target.value as Period)}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <option value={Period.WEEK}>Week</option>
-              <option value={Period.MONTH}>Month</option>
-              <option value={Period.YEAR}>Year</option>
-            </select>
-          </label>
-        </div>
+          <select
+            id="periodInput"
+            value={period}
+            onChange={(event) => setPeriod(event.target.value as Period)}
+            className="mx-1 border-b-2 bg-inherit border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value={Period.WEEK}>week</option>
+            <option value={Period.MONTH}>month</option>
+            <option value={Period.YEAR}>year</option>
+          </select>
+          .
+        </p>
       </div>
 
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold text-gray-800">
-          Cost per Use:{" "}
-          <span className="text-indigo-600">${calculateCostPerUse()}</span>
+      <div className="mt-4">
+        <h3 className="mt-6 text-xl font-semibold text-gray-800">
+          Is it worth
+          <span className="text-indigo-600">
+            {` \$${calculateCostPerUse()} `}
+          </span>
+          per use?
         </h3>
       </div>
     </div>
